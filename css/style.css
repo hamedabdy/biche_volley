@@ -1,0 +1,27 @@
+#teams {
+}
+
+.team {
+	padding: 10px;
+	display: inline-table;
+}
+
+.players {
+
+}
+
+.addPlayer {
+
+}
+
+.addTeam {
+	position: fixed;
+	bottom: 10px;
+	left: 10px;
+}
+
+.captain {
+}
+
+.teamName {
+}

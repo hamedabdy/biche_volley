@@ -1,0 +1,43 @@
+{
+  "name": "biche_volley",
+  "version": "0.0.0",
+  "description": "mange a volleyball tournement (ex: biche volley)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hamedabdy/biche_volley.git"
+  },
+  "keywords": [
+    "nodejs",
+    "mongodb",
+    "javascript",
+    "volleyball",
+    "tournement",
+    "team",
+    "manager",
+    "dynamic",
+    "html5",
+    "css3"
+  ],
+  "author": "Hamed Abdy",
+  "license": "GPL V2",
+  "bugs": {
+    "url": "https://github.com/hamedabdy/biche_volley/issues"
+  },
+  "homepage": "https://github.com/hamedabdy/biche_volley",
+  "dependencies": {
+    "express": "~4.6.1",
+    "request": "~2.16.6",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "connect-flash": "~0.1.1",
+    "ejs": "~0.8.4",
+    "bcrypt": "~0.7.6",
+    "mongojs": "~0.13.0",
+    "body-parser": "~1.4.3"
+  }
+}
