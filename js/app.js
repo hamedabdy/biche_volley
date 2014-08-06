@@ -25,10 +25,13 @@ function addTeam2 () {
 		+ "<div class='players'></div><br>"
 		+ "<input type='text' class='msgBox'"
 		+ " name='msgBox' value='Team incomplete' readonly><br>"
-		+ "<button class='addPlayer' onclick='addPlayer(this)'>Add Player</button>"
+		+ "<button class='addPlayer' onclick='addPlayer(this, " + team_id + ")'>Add Player</button>"
 		+ "<input type='hidden' name='team_id' value='" + team_id + "'>"
 		+ "</form></div>");
-	$("input").on("change", show);
+	var teamX = document.getElementById(team_id);
+	var t = teamX.getElementsByTagName("form");
+	var y = t[0];
+	y.onchange = function(){toJson(y)};
 }
 
 
@@ -83,7 +86,7 @@ function addTeam () {
 	sendToServer(teams_json);
 }
 
-function addPlayer (arg) {
+function addPlayer (arg, team) {
 	arg = arg.parentNode.children;
 	var players = arg[3],
 		msg_box = arg[4],
@@ -94,7 +97,7 @@ function addPlayer (arg) {
 	player.value = "new player";
 	player.setAttribute("class", "player");
 	player.setAttribute("name", "players[]");
-	minus.setAttribute("onclick", "removePlayer(this); show(); updateMsg(this);");
+	minus.setAttribute("onclick", "removePlayer(this, "+team+");");
 	minus.appendChild(document.createTextNode("-"));
 
 	var n = players.getElementsByTagName("input").length + 2;
@@ -105,23 +108,31 @@ function addPlayer (arg) {
 			players.appendChild(newline);
 	} 
 
-	$("input").on("change", show);
+	var teamX = team.getElementsByTagName("form");
+	var y = teamX[0];
+	y.onchange = function(){toJson(y)};
 	updateMsg(players, n);
-	//sendToServer(team);
 }
 
-function removePlayer (players) {
-	players.previousSibling.remove();
-	players.nextSibling.remove();
-	players.remove();
+function removePlayer (minus, team) {
+	var players = minus.parentNode;
+	minus.previousSibling.remove();
+	minus.nextSibling.remove();
+	minus.remove();
 
-	var n = players.getElementsByTagName("input").length + 2;
-	
+	console.log(JSON.stringify(team));
+
+	/*
+	var teamX = team.getElementsByTagName("form");
+	var y = teamX[0];
+	y.onchange = function(){toJson(y)};
+	*/
+
+	var n = players.getElementsByTagName("input").length + 1;
 	updateMsg(players, n);
 }
 
 function updateMsg (players, n) {
-	console.log(((players.nextSibling).nextSibling).nodeName);
 	var msg_box = (players.nextSibling).nextSibling;
 	if (n < 4) {
 		msg_box.value = "Team incomplete!";
@@ -160,7 +171,7 @@ var getFromServer = function  () {
         	+ " " +JSON.stringify(err) 
         	+ " " + JSON.stringify(status));},
         success : function(data, status) {
-            //console.log(JSON.stringify(data));
+            console.log(JSON.stringify(data));
             return data;
         }
     });
@@ -173,22 +184,20 @@ function show () {
 
 	y = $("form").prop("tagName");
 	var o = $("form").serializeObject();
-	console.log("jqury : " + y);
+	//console.log("jqury : " + y);
 	var x = document.body.children;
 	x = x[0].children;
 	x = x[0].children;
 	var r = x[0];
-	console.log(x[0].nodeName);
+	//console.log(x[0].nodeName);
 	r = $(r).serializeObject();
 	var s = JSON.stringify(r);
 	$("#test").text(s);
 }
 
 
-function formToJson () {
-	var x = document.body.children;
-	x = x[0].children;
-	x = x[0].children;
-	var r = x[0];
-	r = $(r).serializeObject();
+function toJson (team) {
+	var data = $(team).serializeObject();
+	sendToServer(JSON.stringify(data));
+	console.log("json: " + JSON.stringify(data));
 }
