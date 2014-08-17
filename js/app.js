@@ -35,57 +35,6 @@ function addTeam2 () {
 }
 
 
-
-function addTeam () {
-	var body = document.body,
-		team = document.createElement("div"),
-		players = document.createElement("div"),
-		captain = document.createElement("button"),
-		newline = document.createElement("br"),
-		msg_box = document.createElement("div"),
-		p = document.createElement("p"),
-		team_name = document.createElement("h4"),
-		addPlayer = document.createElement("button"),
-		teams = document.getElementById("teams");
-
-	team.setAttribute("id", "team_"+ Math.floor((Math.random()*100)+1));
-	team.setAttribute("class", "team");
-	players.setAttribute("class", "players");
-	players.innerHTML = "Captain: ";
-	captain.setAttribute("disabled", "true");
-	captain.setAttribute("class", "captain");
-	captain.innerHTML = prompt("Your name: ");
-	p.appendChild(document.createTextNode("Team incomplete!"));
-	msg_box.appendChild(p);
-	addPlayer.setAttribute("class", "addPlayer");
-	addPlayer.setAttribute("onclick", "addPlayer(this)");
-	addPlayer.innerHTML = "Add Player";
-	team_name.innerHTML = prompt("Team's name: ");
-	team_name.setAttribute("onclick", "this.contentEditable=true;");
-	team_name.setAttribute("class", "teamName");
-
-	msg_box.appendChild(p);
-	players.appendChild(captain);
-	players.appendChild(newline);
-	team.appendChild(team_name);
-	team.appendChild(players);
-	team.appendChild(msg_box);
-	team.appendChild(addPlayer);
-	teams.appendChild(team);
-
-	// Creating JSON object from form
-	var teams_json = "";
-	teams_json = '{ "team_id" : ' + '"' + team.getAttribute("id") + '",'
-		+ ' "name" : "' + team_name.innerHTML
-		+ '", "captain" : "' + captain.innerHTML
-		+ '", "players" : []'
-		+ '}';
-
-	console.log(teams_json);
-
-	sendToServer(teams_json);
-}
-
 function addPlayer (arg, team) {
 	arg = arg.parentNode.children;
 	var players = arg[3],
@@ -97,7 +46,8 @@ function addPlayer (arg, team) {
 	player.value = "new player";
 	player.setAttribute("class", "player");
 	player.setAttribute("name", "players[]");
-	minus.setAttribute("onclick", "removePlayer(this, "+team+");");
+	//minus.setAttribute("onclick", "removePlayer(this, "+team+");");
+	minus.onclick = function() { removePlayer(this, team);};
 	minus.appendChild(document.createTextNode("-"));
 
 	var n = players.getElementsByTagName("input").length + 2;
@@ -114,23 +64,20 @@ function addPlayer (arg, team) {
 	updateMsg(players, n);
 }
 
+
 function removePlayer (minus, team) {
-	var players = minus.parentNode;
+	var teamX = team.getElementsByTagName("form")
+	, form = teamX[0]
+	, players = minus.parentNode;
 	minus.previousSibling.remove();
 	minus.nextSibling.remove();
+	toJson(form);
 	minus.remove();
-
-	console.log(JSON.stringify(team));
-
-	/*
-	var teamX = team.getElementsByTagName("form");
-	var y = teamX[0];
-	y.onchange = function(){toJson(y)};
-	*/
 
 	var n = players.getElementsByTagName("input").length + 1;
 	updateMsg(players, n);
 }
+
 
 function updateMsg (players, n) {
 	var msg_box = (players.nextSibling).nextSibling;
@@ -147,6 +94,7 @@ function updateMsg (players, n) {
 	}
 }
 
+
 function sendToServer (arg) {
     $.ajax({
         type : 'POST',
@@ -160,6 +108,7 @@ function sendToServer (arg) {
         		}
     });
 }
+
 
 var getFromServer = function  () {
 	$.ajax({
