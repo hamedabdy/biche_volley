@@ -1,27 +1,86 @@
+body {
+	background-color: #369;
+}
+
 #teams {
+	border: 1px solid #888;
+	padding: 10px 0px 0px 10px;
 }
 
 .team {
-	padding: 10px;
+	padding: 10px 25px 10px 10px;
 	display: inline-table;
+	border: 1px solid #999;
+	margin: 0px 10px 10px 0px;
 }
+
+.addTeam {
+	border: 0 none;
+	padding: 5px 10px 5px 10px;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 20px;
+}
+
+.team_name {
+	width: 253px;
+	margin: 0px 0px 5px 0px;
+	padding: 5px 10px;
+	border-width: 0px 0px 0px 10px;
+	font-size: 14px;
+	font-weight: bold;
+	border-color: #0F0;
+}
+
+.captain_title {
+	position: absolute;
+	margin: 7px 0px 0px 20px;
+}
+
+.captain {
+	padding: 5px 10px 5px 70px;
+	border-width: 0px 0px 0px 10px;
+	margin: 0px 0px 5px 0px;
+	font-size: 14px;
+	border-color: #9CCF31;
+	width: 193px;
+}
+
 
 .players {
 
 }
 
-.addPlayer {
-
-}
-
-.addTeam {
+.removePlayer {
 	position: fixed;
-	bottom: 10px;
-	left: 10px;
+	margin: 4px 0px 0px -30px;
+	border: 0 none;
+	border-radius: 0;
 }
 
-.captain {
+.player {
+	width: 221px;
+	margin: 0px 0px 5px 0px;
+	padding: 5px 43px 5px 10px;
+	border-width: 0px 0px 0px 10px;
+	font-size: 12px;
+	border-color: #F7D708;
 }
 
-.teamName {
+.msgBox {
+	width: 253px;
+	margin: 0px 0px 5px;
+	padding: 5px 10px;
+	border-width: 0px 0px 0px 10px;
+	font-size: 11px;
+	font-weight: bold;
+	border-color: #FF7260;
+}
+
+.addPlayer {
+	border: 0px none;
+	width: 100%;
+	padding: 3px;
+	font-size: 11px;
+	font-weight: bold;
 }

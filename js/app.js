@@ -15,13 +15,15 @@ $.fn.serializeObject = function()
     return o;
 };
 
-function addTeam2 () {
+function addTeam () {
 	var team_id = 'team_'+ Math.floor((Math.random()*100)+1);
-	$("#teams").append("<div id='" + team_id + "'>"
-		+ "<form onsubmit='show(); return false;'>"
+	$("#teams").append(
+		  "<div id='" + team_id + "' class='team'>"
+		+ "<form onsubmit='return false;'>"
 	 	+ "<input type='text' class='team_name' name='team_name' placeholder='Team name'>"
-	 	+ "<br>" 
-		+ "Captain: <input type='text' class='captain' name='captain' placeholder='captain'>"
+	 	+ "<br>"
+	 	+ "<div class='captain_title'>Captain</div>"
+		+ "<input type='text' class='captain' name='captain' placeholder='Captain'>"
 		+ "<div class='players'></div><br>"
 		+ "<input type='text' class='msgBox'"
 		+ " name='msgBox' value='Team incomplete' readonly><br>"
@@ -37,17 +39,17 @@ function addTeam2 () {
 
 function addPlayer (arg, team) {
 	arg = arg.parentNode.children;
-	var players = arg[3],
-		msg_box = arg[4],
+	var players = arg[4],
+		msg_box = arg[5],
 		newline = document.createElement("br"),
 		player = document.createElement("input"),
 		minus = (document.createElement("button"));
 
-	player.value = "new player";
+	player.setAttribute("placeholder", "New player");
 	player.setAttribute("class", "player");
 	player.setAttribute("name", "players[]");
-	//minus.setAttribute("onclick", "removePlayer(this, "+team+");");
 	minus.onclick = function() { removePlayer(this, team);};
+	minus.setAttribute("class", "removePlayer");
 	minus.appendChild(document.createTextNode("-"));
 
 	var n = players.getElementsByTagName("input").length + 2;
@@ -128,17 +130,13 @@ var getFromServer = function  () {
 
 
 function show () {
-
 	var str = $("form").serialize();
-
 	y = $("form").prop("tagName");
 	var o = $("form").serializeObject();
-	//console.log("jqury : " + y);
 	var x = document.body.children;
 	x = x[0].children;
 	x = x[0].children;
 	var r = x[0];
-	//console.log(x[0].nodeName);
 	r = $(r).serializeObject();
 	var s = JSON.stringify(r);
 	$("#test").text(s);
