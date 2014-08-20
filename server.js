@@ -34,21 +34,11 @@ var express = require('express')
   app.use(express.static(__dirname+'/'));
 
 app.post('/post', function(req, res) {
-  console.log("REQ ====>> " + util.inspect(req.body) );
-  console.log("RES ====>> " + util.inspect(res.body) );
-  console.log("RESPONSE STATUS => " + res.statusCode);
-  query = '{ "team_id": "' + req.body.team_id + '", "name" : "' 
-    + req.body.name + '", "captain" : "' + req.body.captain + '" }';
-  query = JSON.parse(query);
-  database.insertData(query, req.body);
+  database.saveData(req.body);
 });
 
 
 app.get('/get', function(req, res) {
-  console.log("REQ ====>> " + util.inspect(req.body) );
-  console.log("RES ====>> " + util.inspect(res.body) );
-  console.log("RESPONSE STATUS => " + res.statusCode);
-
   db.bicheVolley.find( '', { limit : 5000 }, function(err, result) {
     if(!err) {
       console.log(result.length);

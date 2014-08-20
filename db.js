@@ -7,10 +7,10 @@ var mongojs = require('mongojs'),
 /*
  * inserting data into database
  */
-function insertData(query, data) {
-    db.bicheVolley.update(query, data, {continueOnError: true, upsert: true}, function(err, docs){
+function saveData(data) {
+    db.bicheVolley.save(data, {continueOnError: true}, function(err, docs){
        if(err) console.log('err: ' + err + '\n');
-       else console.log('data inserted successfully!\n');
+       else console.log(JSON.stringify(docs) + ' -- SAVED SUCCESSFULLY!\n');
    });
 }
 
@@ -19,7 +19,7 @@ function dropCollection(){
 }
 
 function ensureIndex(){
-	db.bicheVolley.ensureIndex({"team_id" : 1, "name" : 1, "captain" : 1});
+	db.bicheVolley.ensureIndex({"name" : 1, "captain" : 1});
 }
 
 function closeDatabase(){
@@ -28,7 +28,7 @@ function closeDatabase(){
 }
 
 exports.dropCollection = dropCollection;
-exports.insertData = insertData;
+exports.saveData = saveData;
 exports.ensureIndex = ensureIndex;
 exports.closeDatabase = closeDatabase;
 

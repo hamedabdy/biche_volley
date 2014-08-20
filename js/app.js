@@ -28,7 +28,7 @@ function addTeam () {
 		+ "<input type='text' class='msgBox'"
 		+ " name='msgBox' value='Team incomplete' readonly><br>"
 		+ "<button class='addPlayer' onclick='addPlayer(this, " + team_id + ")'>Add Player</button>"
-		+ "<input type='hidden' name='team_id' value='" + team_id + "'>"
+		+ "<input type='hidden' name='_id' value='" + team_id + "'>"
 		+ "</form></div>");
 	var teamX = document.getElementById(team_id);
 	var t = teamX.getElementsByTagName("form");
@@ -47,7 +47,7 @@ function addPlayer (arg, team) {
 
 	player.setAttribute("placeholder", "New player");
 	player.setAttribute("class", "player");
-	player.setAttribute("name", "players[]");
+	player.setAttribute("name", "players");
 	minus.onclick = function() { removePlayer(this, team);};
 	minus.setAttribute("class", "removePlayer");
 	minus.appendChild(document.createTextNode("-"));
@@ -69,8 +69,8 @@ function addPlayer (arg, team) {
 
 function removePlayer (minus, team) {
 	var teamX = team.getElementsByTagName("form")
-	, form = teamX[0]
-	, players = minus.parentNode;
+		, form = teamX[0]
+		, players = minus.parentNode;
 	minus.previousSibling.remove();
 	minus.nextSibling.remove();
 	toJson(form);
@@ -80,7 +80,9 @@ function removePlayer (minus, team) {
 	updateMsg(players, n);
 }
 
-
+/*
+ *	Update message field
+ */
 function updateMsg (players, n) {
 	var msg_box = (players.nextSibling).nextSibling;
 	if (n < 4) {
@@ -123,28 +125,53 @@ var getFromServer = function  () {
         	+ " " + JSON.stringify(status));},
         success : function(data, status) {
             console.log(JSON.stringify(data));
+            for (var i = 0; i < data.length; i++) {
+            	toHtml(data, i);
+            };
             return data;
         }
     });
 } ();
 
-
-function show () {
-	var str = $("form").serialize();
-	y = $("form").prop("tagName");
-	var o = $("form").serializeObject();
-	var x = document.body.children;
-	x = x[0].children;
-	x = x[0].children;
-	var r = x[0];
-	r = $(r).serializeObject();
-	var s = JSON.stringify(r);
-	$("#test").text(s);
-}
-
-
-function toJson (team) {
-	var data = $(team).serializeObject();
+/*
+ *	serialize a form into JSON (ref. serializeObject())
+ */
+function toJson (htmlData) {
+	var data = $(htmlData).serializeObject();
+	/*
+	 *	remove empty player fields from JSON data!
+	 */
+	var l = 0;
+	if(data.players) {
+		l = (data.players).length;
+		for(var i  = 0; i < l; i++) {
+			if(data.players[i] == "") {
+				data.players.pop(i);
+			}
+		}
+	}
 	sendToServer(JSON.stringify(data));
 	console.log("json: " + JSON.stringify(data));
+}
+
+/*
+ *	convert JSON into HTML form elements
+ */
+function toHtml (jsonData, i) {
+	console.log("test: " + JSON.stringify(jsonData[i]));
+	var o = jsonData[i]
+		, team_id = o["_id"]
+		, team_name = o.team_name
+		, captain = o.captain
+		, players = []
+		, msg_box = o.msg_box
+		, players_l = 0;
+
+		if (o.players) {
+			players_l = (o.players).length;
+			for (var j = 0; j < players_l; j++) {
+				players[j].push(o.players[j]);
+				console.log("player [" + j + "]: " + players[j]);
+			};
+		};
 }
