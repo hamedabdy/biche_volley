@@ -15,29 +15,31 @@ $.fn.serializeObject = function()
     return o;
 };
 
-function addTeam () {
-	var team_id = 'team_'+ Math.floor((Math.random()*100)+1);
+function addTeam (team_id = "team_" + Math.floor((Math.random()*100)+1) 
+	, team_name = "", captain = "") {
 	$("#teams").append(
 		  "<div id='" + team_id + "' class='team'>"
 		+ "<form onsubmit='return false;'>"
-	 	+ "<input type='text' class='team_name' name='team_name' placeholder='Team name'>"
+	 	+ "<input type='text' class='team_name' "
+	 	+ "name='team_name' placeholder='Team name' value='" + team_name + "'>"
 	 	+ "<br>"
 	 	+ "<div class='captain_title'>Captain</div>"
-		+ "<input type='text' class='captain' name='captain' placeholder='Captain'>"
+		+ "<input type='text' class='captain' name='captain' placeholder='Captain' "
+		+ "value='" + captain + "'>"
 		+ "<div class='players'></div><br>"
 		+ "<input type='text' class='msgBox'"
-		+ " name='msgBox' value='Team incomplete' readonly><br>"
+		+ " name='msgBox' value='Team incomplete!' readonly><br>"
 		+ "<button class='addPlayer' onclick='addPlayer(this, " + team_id + ")'>Add Player</button>"
 		+ "<input type='hidden' name='_id' value='" + team_id + "'>"
 		+ "</form></div>");
-	var teamX = document.getElementById(team_id);
-	var t = teamX.getElementsByTagName("form");
-	var y = t[0];
+	var teamX = document.getElementById(team_id)
+		, t = teamX.getElementsByTagName("form")
+		, y = t[0];
 	y.onchange = function(){toJson(y)};
 }
 
 
-function addPlayer (arg, team) {
+function addPlayer (arg, team, player_name = "") {
 	arg = arg.parentNode.children;
 	var players = arg[4],
 		msg_box = arg[5],
@@ -45,6 +47,7 @@ function addPlayer (arg, team) {
 		player = document.createElement("input"),
 		minus = (document.createElement("button"));
 
+	player.setAttribute("value", player_name);
 	player.setAttribute("placeholder", "New player");
 	player.setAttribute("class", "player");
 	player.setAttribute("name", "players");
@@ -60,8 +63,8 @@ function addPlayer (arg, team) {
 			players.appendChild(newline);
 	} 
 
-	var teamX = team.getElementsByTagName("form");
-	var y = teamX[0];
+	var teamX = team.getElementsByTagName("form")
+		, y = teamX[0];
 	y.onchange = function(){toJson(y)};
 	updateMsg(players, n);
 }
@@ -139,17 +142,23 @@ var getFromServer = function  () {
 function toJson (htmlData) {
 	var data = $(htmlData).serializeObject();
 	/*
-	 *	remove empty player fields from JSON data!
+	 *	remove empty player fields from JSON data.
 	 */
 	var l = 0;
 	if(data.players) {
-		l = (data.players).length;
-		for(var i  = 0; i < l; i++) {
-			if(data.players[i] == "") {
-				data.players.pop(i);
+		if(data.players instanceof Array) {
+			l = (data.players).length;
+			for(var i  = 0; i < l; i++) {
+				if(data.players[i] == "") (data.players).pop(i);
 			}
+		} else { //	convert players field into array!
+			tmp = data.players;
+			data.players = [];
+			(data.players).push(tmp);
 		}
 	}
+	//	Deleting msg_box field from JSON data
+	delete data.msgBox;
 	sendToServer(JSON.stringify(data));
 	console.log("json: " + JSON.stringify(data));
 }
@@ -158,20 +167,28 @@ function toJson (htmlData) {
  *	convert JSON into HTML form elements
  */
 function toHtml (jsonData, i) {
-	console.log("test: " + JSON.stringify(jsonData[i]));
 	var o = jsonData[i]
 		, team_id = o["_id"]
 		, team_name = o.team_name
 		, captain = o.captain
 		, players = []
-		, msg_box = o.msg_box
 		, players_l = 0;
 
+		addTeam(team_id, team_name, captain);
+
+		var teamX = document.getElementById(team_id)
+			, f = teamX.getElementsByTagName("form")
+			, g = f[0]
+			, p = (g.getElementsByClassName("players"))[0];
+
 		if (o.players) {
+			if (o.players instanceof Array) {
 			players_l = (o.players).length;
-			for (var j = 0; j < players_l; j++) {
-				players[j].push(o.players[j]);
-				console.log("player [" + j + "]: " + players[j]);
+				for (var j = 0; j < players_l; j++) {
+					players.push(o.players[j]);
+					console.log("player[" + j + "]: " + players[j]);
+					addPlayer(p, teamX, players[j]);
+				};
 			};
 		};
 }
