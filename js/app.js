@@ -38,6 +38,9 @@ function addTeam (team_id = "team_" + Math.floor((Math.random()*100)+1)
 		+ "value='" + mobNum + "'>"
 		+ "<br>"
 		+ "<button class='addPlayer' onclick='addPlayer(this, " + team_id + ")'>Add Player</button>"
+		+ "<br><br>"
+		+ "<button class='addPlayer' onclick='removeTeam(" + team_id + "); "
+		+ "window.location.reload();'>Remove Team</button>"
 		+ "<input type='hidden' name='_id' value='" + team_id + "'>"
 		+ "</form></div>");
 	var teamX = document.getElementById(team_id)
@@ -46,6 +49,19 @@ function addTeam (team_id = "team_" + Math.floor((Math.random()*100)+1)
 	y.onchange = function(){toJson(y)};
 }
 
+function removeTeam (team_id) {
+	team_id = '{ "_id" : "' + team_id.getAttribute('id') + '" }';
+	$.ajax({
+        type : 'POST',
+        url : '/removeTeam',
+        contentType : 'application/json; charset=UTF-8',
+        data: team_id,
+        error: function(jqxhr, status, err) {
+        			console.log(JSON.stringify(err) + " " + JSON.stringify(status)
+        				+ " " + JSON.stringify(jqxhr));
+        		}
+    });
+}
 
 function addPlayer (arg, team, player_name = "") {
 	arg = arg.parentNode.children;

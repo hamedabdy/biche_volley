@@ -45,7 +45,13 @@ app.get('/get', function(req, res) {
       res.send(result); 
     } else console.log(err);
   });
+});
 
+app.post('/removeTeam', function(req, res) {
+  db.bicheVolley.remove(req.body, {}, function(err, result) {
+    if(!err) {
+    } else console.log(err);
+  });
 });
 
 app.listen(process.env.PORT || 3000);
