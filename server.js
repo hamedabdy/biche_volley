@@ -7,31 +7,12 @@ var express = require('express')
 	  , db = mongojs(url, ['bicheVolley'])
     , util = require('util')
     , bodyParser = require('body-parser')
-    , database = require('./db');
-	//  , flash = require('connect-flash')
-	//  , passport = require('passport')
-	//  , LocalStrategy = require('passport-local').Strategy
-	//  , db2 = mongojs(url, ['htpasswd'])
-	 // , bcrypt = require('bcrypt');
-  
-// configure Express
- // app.disable('x-powered-by');
-  //app.use(express.logger());
- // app.set('views', __dirname + '/views');
-  //app.set('view engine', 'ejs');
-  //app.use(express.cookieParser());
-  //app.use(express.bodyParser());
-  //app.use(express.methodOverride());
-  //app.use(express.session({secret: 'concert_dacote'}));
-  // Initialize Passport! Also use passport.session() middleware, to support
-  // persistent login sessions (recommended)
-//  app.use(flash());
-//  app.use(passport.initialize());
-//  app.use(passport.session());
-  //app.use(app.router);
-  //app.use(express.compress());
-  app.use(bodyParser.json());
-  app.use(express.static(__dirname+'/'));
+    , database = require('./db')
+    , favicon = require('serve-favicon');
+
+app.use(bodyParser.json());
+app.use(express.static(__dirname+'/'));
+app.use(favicon(__dirname + '/images/favicon.ico'))
 
 app.post('/post', function(req, res) {
   database.saveData(req.body);
