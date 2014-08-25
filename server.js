@@ -12,7 +12,7 @@ var express = require('express')
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname+'/'));
-app.use(favicon(__dirname + '/images/favicon.ico'))
+app.use(favicon(__dirname + '/images/favicon.ico'));
 
 app.post('/post', function(req, res) {
   database.saveData(req.body);

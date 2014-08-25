@@ -57,8 +57,7 @@ function removeTeam (team_id) {
         contentType : 'application/json; charset=UTF-8',
         data: team_id,
         error: function(jqxhr, status, err) {
-        			console.log(JSON.stringify(err) + " " + JSON.stringify(status)
-        				+ " " + JSON.stringify(jqxhr));
+        			console.log(JSON.stringify(err) + " " + JSON.stringify(status));
         		}
     });
 }
