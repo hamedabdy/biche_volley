@@ -15,6 +15,10 @@ $.fn.serializeObject = function()
     return o;
 };
 
+$("form").submit(function(e) {
+	e.preventDefault();
+});
+
 function addTeam (team_id = "team_" + Math.floor((Math.random()*100)+1) 
 	, team_name = "", captain = "", email = "", mobNum = "") {
 	$("#teams").append(
