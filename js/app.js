@@ -57,7 +57,8 @@ function removeTeam (team_id) {
         contentType : 'application/json; charset=UTF-8',
         data: team_id,
         error: function(jqxhr, status, err) {
-        			console.log(JSON.stringify(err) + " " + JSON.stringify(status));
+        			console.log(JSON.stringify(err) + " " + JSON.stringify(status)
+        				+ " " + JSON.stringify(jqxhr));
         		}
     });
 }
@@ -132,7 +133,8 @@ function sendToServer (arg) {
         contentType : 'application/json; charset=UTF-8',
         data: arg,
         error: function(jqxhr, status, err) {
-        			console.log(JSON.stringify(err) + " " + JSON.stringify(status));
+        			console.log(JSON.stringify(err) + " " + JSON.stringify(status)
+        				+ " " + JSON.stringify(jqxhr));
         		}
     });
 }
@@ -144,7 +146,9 @@ var getFromServer = function  () {
         url : '/get',
         contentType : 'application/json; charset=UTF-8',
         error: function(jqxhr, status, err) {
-        	console.log(JSON.stringify(err) + " " + JSON.stringify(status));},
+        	console.log(JSON.stringify(err) + " " + JSON.stringify(status)
+        				+ " " + JSON.stringify(jqxhr));
+        	},
         success : function(data, status) {
             for (var i = 0; i < data.length; i++) {
             	toHtml(data, i);
