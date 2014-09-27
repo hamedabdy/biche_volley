@@ -18,7 +18,6 @@ app.post('/post', function(req, res) {
   req.accepts('application/json');
   res.type('application/json');
   database.saveData(req.body);
-  
   var response = {
     status  : 200,
     success : 'Updated Successfully'
@@ -38,18 +37,18 @@ app.get('/get', function(req, res) {
 });
 
 app.post('/removeTeam', function(req, res) {
-  var response = {
-    status  : 200,
-    success : 'Updated Successfully'
-  }
-
-  res.end(JSON.stringify(response));
-
+  req.accepts('application/json');
+  res.type('application/json');
   db.bicheVolley.remove(req.body, {}, function(err, result) {
     if(!err) {
       console.log("Removed Successfully\n");
     } else console.log(err);
   });
+  var response = {
+    status  : 200,
+    success : 'Removed Successfully'
+  }
+  res.end(JSON.stringify(response));
 });
 
 app.listen(process.env.PORT || 3000);

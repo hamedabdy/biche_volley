@@ -15,6 +15,10 @@ $.fn.serializeObject = function()
     return o;
 };
 
+function removeTeamCallback (){
+	window.location.reload();
+}
+
 /*
  *	serialize a form into JSON (ref. serializeObject())
  */
@@ -81,11 +85,13 @@ var getFromServer = function  () {
 	});
 	$.ajax({
         type : 'GET',
+        accepts : 'json',
+        dataType : 'json',
         url : '/get',
         contentType : 'application/json; charset=UTF-8',
         error: function(jqxhr, status, err) {
-        	console.log(JSON.stringify(err) + " " + JSON.stringify(status)
-        				+ " " + JSON.stringify(jqxhr));
+        		//console.log(JSON.stringify(err) + " " + JSON.stringify(status)
+        		//	+ " " + JSON.stringify(jqxhr));
         	},
         success : function(data, status) {
             for (var i = 0; i < data.length; i++) {
@@ -99,16 +105,18 @@ var getFromServer = function  () {
 function sendToServer (arg) {
     $.ajax({
         type : 'POST',
+        accepts : 'json',
+        dataType : 'json',
         url : '/post',
         contentType : 'application/json; charset=UTF-8',
         data: arg,
         error: function(jqxhr, status, err) {
-        			console.log(JSON.stringify(err) + " " + JSON.stringify(status)
-        				+ " " + JSON.stringify(jqxhr));
+        			//console.log(JSON.stringify(err) + " " + JSON.stringify(status)
+        			//	+ " " + JSON.stringify(jqxhr));
         		},
         success: function(data, status, jqxhr) {
-        	console.log(JSON.stringify(data) + " " + JSON.stringify(status)
-        				+ " " + JSON.stringify(jqxhr));
+        			//console.log(JSON.stringify(data) + " " + JSON.stringify(status)
+        			//	+ " " + JSON.stringify(jqxhr));
         		}
     });
 }
@@ -143,8 +151,8 @@ function addTeam (team_id, team_name, captain, email, mobNum) {
 		+ "<br>"
 		+ "<button class='addPlayer' onclick='addPlayer(this, " + team_id + ")'>Add Player</button>"
 		+ "<br><br>"
-		+ "<button class='addPlayer' onclick='removeTeam(" + team_id + "); "
-		+ "window.location.reload(); return false;'>Remove Team</button>"
+		+ "<button class='addPlayer' onclick='"
+		+ "removeTeam(" + team_id + ", " + removeTeamCallback + ");'>Remove Team</button>"
 		+ "<input type='hidden' name='_id' value='" + team_id + "'>"
 		+ "</form></div>");
 	var teamX = document.getElementById(team_id)
@@ -157,20 +165,23 @@ function addTeam (team_id, team_name, captain, email, mobNum) {
 	y.onchange = function(){toJson(y)};
 }
 
-function removeTeam (team_id) {
+function removeTeam (team_id, callback) {
 	team_id = '{ "_id" : "' + team_id.getAttribute('id') + '" }';
 	$.ajax({
         type : 'POST',
+        accepts: 'json',
+        dataType : 'json',
         url : '/removeTeam',
         contentType : 'application/json; charset=UTF-8',
         data: team_id,
         error: function(jqxhr, status, err) {
-        			console.log(JSON.stringify(err) + " " + JSON.stringify(status)
-        				+ " " + JSON.stringify(jqxhr));
+        			//console.log(JSON.stringify(err) + " " + JSON.stringify(status)
+        			//	+ " " + JSON.stringify(jqxhr));
         		},
         success: function(data, status, jqxhr) {
-        	console.log(JSON.stringify(data) + " " + JSON.stringify(status)
-        				+ " " + JSON.stringify(jqxhr));
+        			//console.log(JSON.stringify(data) + " " + JSON.stringify(status)
+        			//	+ " " + JSON.stringify(jqxhr));
+        			callback();
         		}
     });
 }
