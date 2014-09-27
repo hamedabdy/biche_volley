@@ -15,7 +15,16 @@ app.use(express.static(__dirname+'/'));
 app.use(favicon(__dirname + '/images/favicon.ico'));
 
 app.post('/post', function(req, res) {
+  req.accepts('application/json');
+  res.type('application/json');
   database.saveData(req.body);
+  
+  var response = {
+    status  : 200,
+    success : 'Updated Successfully'
+  }
+  res.end(JSON.stringify(response));
+
 });
 
 
@@ -29,8 +38,16 @@ app.get('/get', function(req, res) {
 });
 
 app.post('/removeTeam', function(req, res) {
+  var response = {
+    status  : 200,
+    success : 'Updated Successfully'
+  }
+
+  res.end(JSON.stringify(response));
+
   db.bicheVolley.remove(req.body, {}, function(err, result) {
     if(!err) {
+      console.log("Removed Successfully\n");
     } else console.log(err);
   });
 });
