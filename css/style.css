@@ -53,7 +53,7 @@ body {
 }
 
 .removePlayer {
-	position: fixed;
+	position: absolute;
 	margin: 4px 0px 0px -30px;
 	border: 0 none;
 	border-radius: 0;
